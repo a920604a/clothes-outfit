@@ -1,0 +1,11 @@
+requests
+beautifulsoup4
+pandas
+selenium
+line-bot-sdk
+mysql-connector-python
+pydantic
+uvicorn
+fastapi
+webdriver-manager
+objprint
