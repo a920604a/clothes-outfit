@@ -38,10 +38,10 @@ class Topic(Enum):
 
 class ClothesItem(BaseModel):
     post_id: str
-    role: Role  # 角色，可能是店員或顧客
-    sex: Sex  # 性別，可能是男性或女性
-    height: HeightRange  # 身高範圍
-    topic: Topic  # 主題標籤
-    category: str  # 商品分類
-    color : ClothesColor  # 顏色
+    # role: Role  # 角色，可能是店員或顧客
+    # sex: Sex  # 性別，可能是男性或女性
+    # height: HeightRange  # 身高範圍
+    # topic: Topic  # 主題標籤
+    # category: str  # 商品分類
+    # color : ClothesColor  # 顏色
     url : str  # 商品鏈接
