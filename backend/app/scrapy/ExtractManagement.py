@@ -24,14 +24,13 @@ import urllib.parse
 
 class ExtractManagement:
 
-    # @abstractmethod
-    url = "https://www.uniqlo.com/tw/zh_TW/stylingbook/stylehint"  # 定義類屬性 url
-
+    
+    
 
     def get_target_element(self, html_content):
         # 使用 BeautifulSoup 解析 HTML 內容
         soup = BeautifulSoup(html_content, 'html.parser')
-        main_content = soup.find('body').find(id='root').find('main')
+        main_content = soup.find('body')
         # print(main_content)
         
         # option 1 
@@ -47,8 +46,11 @@ class ExtractManagement:
         # styling_grid_items = div_element.find_all('div', class_='fr-ec-styling-grid__item')
 
         # option 2 , directly
-        styling_grid_items = main_content.find_all('div', class_='fr-ec-styling-grid__item')
+        styling_grid_items = main_content.find_all('div', class_='listed-items-4columns')
         # print(type(styling_grid_items))
+        print(styling_grid_items)
+        with open("styling_grid_items.html", "w", encoding="utf-8") as f:
+            f.write(styling_grid_items[0].prettify())
         
         return styling_grid_items
     
@@ -90,7 +92,8 @@ class ExtractManagement:
 
     
 
-    def executeSelenium(self):
+    def executeSelenium(self, url):
+        
         # 設定 Chrome 瀏覽器選項
         chrome_options = Options()
         chrome_options.add_argument("--headless")  # 啟用無頭模式
@@ -107,7 +110,7 @@ class ExtractManagement:
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
         # 打開網址
-        driver.get(f"{self.url}/men")  # 使用類屬性 url
+        driver.get(f"url/men")  # 使用類屬性 url
 
         # 等待頁面加載完成（視情況調整等待時間）
         # time.sleep(2)
@@ -152,95 +155,31 @@ class ExtractManagement:
 
         # 關閉瀏覽器
         driver.quit()
-        
+                
 
-        # 使用提取目標元素的函數
-        # try:
-        #     target_element = self.get_target_element(html_content)
-                
-        #     for item in target_element:
-        #         # 將每個 item 的 HTML 內容添加到列表中
-        #         self.item_contents.append(item.prettify())
-        # except Exception as e:
-        #     print(f"錯誤：{e}")
-                
-   
-    def executeRequest(self):
-        url = "https://www.uniqlo.com/tw/api/ugc-proxy/v1/contents/search?style_gender%5B0%5D=1&order=published_at%3Adesc&result_limit=50&page=1&priority_flag=true&brand=uq"
+    def executeRequest(self, url):
         header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'}
-        print(url)
+        print()
 
         r = requests.get(url, headers=header)
         
         # 檢查請求是否成功
         if r.status_code == 200:
-            try:
-                data = json.loads(r.text)
-                # print(data)
-                with open('data.json', 'w', encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
-                print("數據已成功保存到 data.json")
-            except json.JSONDecodeError:
-                print("JSON 解碼錯誤。響應內容不是有效的 JSON。")
-                print("響應內容：", r.text)
+            return r.text
         else:
             print(f"請求失敗。狀態碼：{r.status_code}")
-            print("響應內容：", r.text)
+            # print("響應內容：", r.text)
+        return None
 
 
-    def executeRequest(self):
-        base_url = "https://www.uniqlo.com/tw/api/ugc-proxy/v1/contents/search"
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
-        }
-
-        all_data =[]
-
-        # 爬取前 5 頁的數據作為示例
-        for page in range(1, 6):
-              # 設定查詢參數的基本部分
-            params = {
-                "style_gender[0]": 1,
-                "order": "published_at:desc",
-                "result_limit": 50,
-                "page":page,
-                "priority_flag": "true",
-                "brand": "uq"
-            }
-
-            # 使用 urlencode 編碼查詢參數
-            encoded_params = urllib.parse.urlencode(params)
-
-        
-            url = f"{base_url}?{encoded_params}"
-            print(url)
-            r = requests.get(url, headers=headers)
-
-            if r.status_code == 200:
-                try:
-                    data = json.loads(r.text)  # 直接解析 JSON 響應
-                    all_data.append(data)  # 假設數據在 'results' 鍵下
-                    print(len(all_data))
-                except json.JSONDecodeError:
-                    print(f"第 {page} 頁的 JSON 解碼錯誤。")
-                    print("響應內容：", r.text)
-            else:
-                print(f"第 {page} 頁的請求失敗。狀態碼：{r.status_code}")
-            #     print("響應內容：", response.text)
-
-        # 將所有頁面的數據保存到 JSON 文件
-        with open('all_data.json', 'w', encoding='utf-8') as f:
-            json.dump(all_data, f, ensure_ascii=False, indent=4)
-
-        print("所有數據已成功保存到 all_data.json")
-
-
+ 
     def extract(self):
         
         
 
-        # self.executeRequest()
-        self.executeSelenium()
+        data = self.executeRequest("https://www.beams.tw/styling/?sex=M")
+        self.get_target_element(data)
+        # self.executeSelenium()
 
         # 獲取頁面高度
     
@@ -254,23 +193,3 @@ class ExtractManagement:
 
 # if __name__ == "__main__":
 #     ExtractManagement().extract()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
