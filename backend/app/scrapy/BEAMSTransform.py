@@ -13,7 +13,6 @@ class BEAMSTransform(TransformManager):
 
     def transform(self):
         print(self.number)
-        count = 0
         for post_data in self.posts:
             element = post_data.post.find("div", class_="beams-list-image-item-img")
             # if element:
