@@ -1,5 +1,6 @@
-from app.scrapy import ExtractManagement
+from app.scrapy import BEAMSExtract, BEAMSTransform
 
 if __name__ == "__main__":
-    
-    ExtractManagement.ExtractManagement().extract()
+
+    posts = BEAMSExtract.BEAMSExtract().extract()
+    BEAMSTransform.BEAMSTransform(posts).transform()

@@ -1,27 +1,34 @@
 from pydantic import BaseModel
 from enum import Enum
 
+
 class ClothesColor(Enum):
-    WHITE = "白"
-    GRAY = "灰"
-    BLACK = "黑"
-    PINK = "粉"
-    RED = "紅"
-    ORANGE = "橙"
-    BEIGE = "米"
-    BROWN = "棕"
-    YELLOW = "黃"
-    GREEN = "綠"
-    BLUE = "藍"
-    PURPLE = "紫"
+    WHITE = "白色系"
+    BLACK = "黑色系"
+    GRAY = "灰色系"
+    BROWN = "棕色系"
+    BEIGE = "米色系"
+    GREEN = "綠色系"
+    BLUE = "藍色系"
+    PURPLE = "紫色系"
+    YELLOW = "黃色系"
+    PINK = "粉色系"
+    RED = "紅色系"
+    ORANGE = "橘色系"
+    SILVER = "銀色系"
+    GOLD = "金色系"
+    BRONZE = "其他"
+
 
 class Role(Enum):
     STAFF = "店員"
     CUSTOMER = "顧客"
 
+
 class Sex(Enum):
-    MALE = "男性"
-    FEMALE = "女性"
+    MALE = "M"
+    FEMALE = "W"
+
 
 class HeightRange(Enum):
     UNDER_150CM = "150cm以下"
@@ -32,16 +39,19 @@ class HeightRange(Enum):
     BETWEEN_170_175CM = "170cm - 175cm"
     ABOVE_175CM = "175cm以上"
 
+
 class Topic(Enum):
     OFFICIAL_STYLING = "Official Styling"
     STYLEHINT = "StyleHint"
 
+
 class ClothesItem(BaseModel):
-    post_id: str
+    # post_id: str
     # role: Role  # 角色，可能是店員或顧客
-    # sex: Sex  # 性別，可能是男性或女性
+    sex: Sex  # 性別，可能是男性或女性
     # height: HeightRange  # 身高範圍
     # topic: Topic  # 主題標籤
     # category: str  # 商品分類
-    # color : ClothesColor  # 顏色
-    url : str  # 商品鏈接
+    color: ClothesColor  # 顏色
+    post_url: str  # 商品鏈接
+    image_url: str

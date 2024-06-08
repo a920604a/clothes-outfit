@@ -5,8 +5,8 @@ services:
     build:
       context: backend/
       dockerfile: Dockerfile
-    image: outfit/database:1.0.0
-    container_name: outfit-database
+    image: outfit/backend:1.0.0
+    container_name: outfit-backend
     restart: unless-stopped
     ports:
       - "5000:5000"
@@ -15,8 +15,8 @@ services:
     build:
       context: database/
       dockerfile: Dockerfile
-    image: outfit/backend:1.0.0
-    container_name: outfit-backend
+    image: outfit/database:1.0.0
+    container_name: outfit-database
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "root"

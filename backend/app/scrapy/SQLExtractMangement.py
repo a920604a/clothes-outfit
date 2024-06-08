@@ -1,2 +1,0 @@
-from ExtractManagement import ExtractManagement
-
