@@ -1,30 +1,45 @@
+-- 創建資料庫
 CREATE DATABASE IF NOT EXISTS closet;
-GRANT ALL on closet.* to ccc @'%';
-CREATE TABLE IF NOT EXISTS `user`(
+-- 授權
+GRANT ALL ON closet.* TO 'ccc'@'%';
+-- 使用資料庫
+USE closet;
+-- 創建使用者表
+CREATE TABLE IF NOT EXISTS `user` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '使用者ID',
-    `username`,
-    `password`,
-    `email`,
+    `username` VARCHAR(30) NULL DEFAULT NULL COMMENT '登錄賬號',
+    `password` VARCHAR(50) NULL DEFAULT NULL COMMENT '密碼',
+    `email` VARCHAR(50) NULL DEFAULT NULL COMMENT '用戶郵箱',
+    `sex` INT(1) NULL DEFAULT NULL COMMENT '用戶性別（1男 2女 3未知）',
+    `login_ip` VARCHAR(50) NULL DEFAULT NULL COMMENT '最後登陸IP',
+    `login_date` TIMESTAMP NULL DEFAULT NULL COMMENT '最後登陸時間',
     `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '創建時間',
-,
     `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
-) ROW_FORMAT = Dynamic;
-CREATE TABLE IF NOT EXISTS `favorites`(
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+-- 創建收藏表
+CREATE TABLE IF NOT EXISTS `favorites` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-    `user_id`,
-    `clothes_id`,
+    `user_id` INT(11) NOT NULL COMMENT '使用者ID',
+    `clothes_id` INT(11) NOT NULL COMMENT '衣服ID',
     `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '創建時間',
-,
     `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
-);
-CREATE TABLE IF NOT EXISTS `clothes`(
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
+    FOREIGN KEY (`clothes_id`) REFERENCES `clothes`(`id`)
+) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+-- 創建衣服表
+CREATE TABLE IF NOT EXISTS `clothes` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '衣服ID',
-    `sex`,
-    `color`,
-    `category`,
-    `image_url`,
-    `post_url`,
+    `sex` INT(1) NULL DEFAULT NULL COMMENT '適用性別',
+    `color` VARCHAR(30) NULL DEFAULT NULL COMMENT '顏色',
+    `category` ENUM('上衣', '長褲', '裙子') NULL DEFAULT NULL COMMENT '分類',
+    `image_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '圖片網址',
+    `post_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '發布網址',
     `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '創建時間',
-,
-    -- `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
-);
+    `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
+    PRIMARY KEY (`id`),
+    INDEX `idx_sex` (`sex`),
+    INDEX `idx_category` (`category`),
+    INDEX `idx_color` (`color`)
+) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;

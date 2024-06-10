@@ -18,11 +18,6 @@ services:
     image: outfit/database:1.0.0
     container_name: outfit-database
     restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "closet"
-      MYSQL_USER: "closet"
-      MYSQL_PASSWORD: "closet"
     ports:
       - "3360:3306"
     volumes:
@@ -37,3 +32,5 @@ services:
     restart: unless-stopped
     ports:
       - "6380:6379"
+    volumes:
+      - ./cache/data:/data
