@@ -114,7 +114,7 @@ class BEAMSExtract(ExtractManager):
     # TODO: many parameter
     def process_page(self, url, page_number, sex, color):
         all_posts = []
-        page_number = min(page_number, 1)  # for testing
+        # page_number = min(page_number, 1)  # for testing
         for i in range(1, page_number + 1):
             page_data = self.executeRequest(
                 f"https://www.beams.tw/styling/?sex={sex}&p={i}"

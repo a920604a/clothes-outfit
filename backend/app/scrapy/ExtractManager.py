@@ -15,8 +15,11 @@ class ExtractManager:
             os.makedirs(path)
 
         for i, item in enumerate(list_items):
+            file_path = f"source_data/{item.sex}/{item.color}"
+            if not os.path.exists(file_path):
+                os.makedirs(file_path)
             with open(
-                f"source_data/{item.sex}-{item.color}-pgae-{p}-item-{i}.html",
+                f"{file_path}/page-{p}-item-{i}.html",
                 "w",
                 encoding="utf-8",
             ) as f:
@@ -24,6 +27,7 @@ class ExtractManager:
                 f.write(item.post.prettify())
 
     def executeRequest(self, url):
+    # TODO: if failed , need to retry 
         header = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
         }
