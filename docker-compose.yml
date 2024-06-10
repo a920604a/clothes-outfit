@@ -1,15 +1,15 @@
 version: "3.8"
 
 services:
-  backend:
-    build:
-      context: backend/
-      dockerfile: Dockerfile
-    image: outfit/backend:1.0.0
-    container_name: outfit-backend
-    restart: unless-stopped
-    ports:
-      - "5000:5000"
+  # backend:
+  #   build:
+  #     context: backend/
+  #     dockerfile: Dockerfile
+  #   image: outfit/backend:1.0.0
+  #   container_name: outfit-backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5000:5000"
 
   database:
     build:
@@ -27,3 +27,13 @@ services:
       - "3360:3306"
     volumes:
       - ./database/data:/var/lib/mysql
+
+  cache:
+    build:
+      context: cache/
+      dockerfile: Dockerfile
+    image: outfit/redis:1.0.0
+    container_name: outfit-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
