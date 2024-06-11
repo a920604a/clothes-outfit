@@ -2,20 +2,21 @@ import requests
 from bs4 import BeautifulSoup
 import os
 from abc import ABC, abstractmethod
+import pandas as pd
 
 
 class ExtractManager:
     def __init__(self):
         self.data = self.executeRequest(self.url)
 
-    def download(self, list_items, p):
+    def download(self, list_items :pd.DataFrame, p):
         # path = os.path.join("source_data", "men")
         path = "source_data"
         if not os.path.exists(path):
             os.makedirs(path)
 
-        for i, item in enumerate(list_items):
-            file_path = f"source_data/{item.sex}/{item.color}"
+        for i, item in list_items.iterrows():
+            file_path = f"source_data/{item['sex']}/{item['category']}/{item['color']}"
             if not os.path.exists(file_path):
                 os.makedirs(file_path)
             with open(
@@ -24,7 +25,7 @@ class ExtractManager:
                 encoding="utf-8",
             ) as f:
                 # f.write(item)
-                f.write(item.post.prettify())
+                f.write(item['post'].prettify())
 
     def executeRequest(self, url):
     # TODO: if failed , need to retry 
