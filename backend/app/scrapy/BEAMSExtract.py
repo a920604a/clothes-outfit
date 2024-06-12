@@ -1,6 +1,8 @@
 from app.scrapy.ExtractManager import ExtractManager
 from enum import Enum
 import pandas as pd
+from itertools import product
+
 from app.utils.process import replace_spaces, extract_tree_value
 import threading
 import concurrent.futures
@@ -107,6 +109,7 @@ class BEAMSExtract(ExtractManager):
         return pd.DataFrame(pd_list)
 
     def get_max_page(self, url, data):
+        if data is None: return 1
         page_number_ul = data.find("ul", class_="page-number")
         if page_number_ul:
             li_elements = page_number_ul.find_all("li")
@@ -158,19 +161,23 @@ class BEAMSExtract(ExtractManager):
     # TODO: many parameter
     def process_page(self, url, page_number, sex, category, color):
         all_posts = []
-        page_number = min(page_number, 1)  # for testing
+        # page_number = min(page_number, 1)  # for testing
         for i in range(1, page_number + 1):
             page_data = self.executeRequest(
                 f"{url}&p={i}"
             )
             print(f"現在處理網頁 {url} 其頁碼是: {i}/{page_number}")
-            posts = self.get_posts_element(page_data, sex, category , color.name)
-            all_posts.extend(posts)
-            self.download(posts, i)
+            if page_data is None: # 此條件沒有滿足的
+                continue
+            else:
+                posts = self.get_posts_element(page_data, sex, category , color.name)
+                all_posts.extend(posts)
+                self.download(posts, i)
         return pd.DataFrame(all_posts)
 
     def process_url(self, sex, category, color):
         url = self.generate_url(sex, category, color)
+        print(f"準備爬蟲 {url}")
         data = self.executeRequest(url)
         page_number = self.get_max_page(url, data)
         return self.process_page(url, page_number, sex, category, color)
@@ -180,34 +187,45 @@ class BEAMSExtract(ExtractManager):
         # urls = self.generate_url()
 
         # FOR dev.
-        all_posts = []
-        for sex in self.sex_dict.keys():
-            for cat_k, cat_v in self.categories.items():
-                for color in self.ColorEnum:
-                    url = self.generate_url(sex, cat_v, color)
-                    print(url)
-
-                    data = self.executeRequest(url)
-                    page_number = self.get_max_page(url, data)
-
-                    page_number = min(page_number, 1)  # for testing
-
-                    all_posts.extend(self.process_page(url, page_number, sex, cat_k, color))
-        print(f"all posts has {len(all_posts)}")
-        return all_posts
-
-        # multithread, maybe block
         # all_posts = []
-        # # TODO: use generator to feed transform
-        # with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
-        #     futures = []
-        #     for sex in self.sex_dict.keys():
-        #         for cat_k, cat_v in self.categories.items():
-        #             for color in self.ColorEnum:
-                        
-        #                 futures.append(executor.submit(self.process_url, sex, cat_k, color))
-        #     for future in concurrent.futures.as_completed(futures):
-        #         all_posts.extend(future.result())
-
+        # for sex in self.sex_dict.keys():
+        #     for cat_k, cat_v in self.categories.items():
+        #         for color in self.ColorEnum:
+        #             all_posts.extend(self.process_url(sex, cat_v, color))
         # print(f"all posts has {len(all_posts)}")
         # return all_posts
+    
+
+        # 定義一個處理單一組合的函數
+        # all_posts = []
+        # def process_combination(args):
+        #     sex, cat_v, color = args
+        #     return self.process_url(sex, cat_v, color)
+
+        # # 使用product來生成所有的組合
+        # combinations = product(self.sex_dict.keys(), self.categories.values(), self.ColorEnum)
+
+        # # 使用map函數來處理每一個組合
+        # processed_posts = map(process_combination, combinations)
+
+        # # 展開嵌套的列表並加入到all_posts中
+        # for posts in processed_posts:
+        #     all_posts.extend(posts)
+        # return all_posts
+
+        # multithread, maybe block
+        all_posts = []
+        # TODO: use generator to feed transform
+        with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
+            futures = []
+            for sex in self.sex_dict.keys():
+                for cat_k, cat_v in self.categories.items():
+                    for color in self.ColorEnum:
+                        futures.append(executor.submit(self.process_url, sex, cat_v, color))
+            for future in concurrent.futures.as_completed(futures):
+                all_posts.extend(future.result())
+       
+
+        print(f"all posts has {len(all_posts)}")
+        return all_posts
+    
