@@ -17,6 +17,21 @@ CREATE TABLE IF NOT EXISTS `user` (
     `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+-- 創建衣服表
+CREATE TABLE IF NOT EXISTS `clothes` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '衣服ID',
+    `sex` INT(1) NULL DEFAULT NULL COMMENT '適用性別',
+    `color` VARCHAR(30) NULL DEFAULT NULL COMMENT '顏色',
+    `category` VARCHAR(30) NULL DEFAULT NULL COMMENT '分類',
+    `image_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '圖片網址',
+    `post_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '發布網址',
+    `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '創建時間',
+    `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
+    PRIMARY KEY (`id`),
+    INDEX `idx_sex` (`sex`),
+    INDEX `idx_category` (`category`),
+    INDEX `idx_color` (`color`)
+) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
 -- 創建收藏表
 CREATE TABLE IF NOT EXISTS `favorites` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -27,19 +42,4 @@ CREATE TABLE IF NOT EXISTS `favorites` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
     FOREIGN KEY (`clothes_id`) REFERENCES `clothes`(`id`)
-) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
--- 創建衣服表
-CREATE TABLE IF NOT EXISTS `clothes` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '衣服ID',
-    `sex` INT(1) NULL DEFAULT NULL COMMENT '適用性別',
-    `color` VARCHAR(30) NULL DEFAULT NULL COMMENT '顏色',
-    `category` ENUM('上衣', '長褲', '裙子') NULL DEFAULT NULL COMMENT '分類',
-    `image_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '圖片網址',
-    `post_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '發布網址',
-    `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '創建時間',
-    `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
-    PRIMARY KEY (`id`),
-    INDEX `idx_sex` (`sex`),
-    INDEX `idx_category` (`category`),
-    INDEX `idx_color` (`color`)
 ) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;

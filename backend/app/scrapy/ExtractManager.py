@@ -9,25 +9,6 @@ class ExtractManager:
     def __init__(self):
         self.data = self.executeRequest(self.url)
 
-    def download(self, list_items :pd.DataFrame, p):
-        # path = os.path.join("source_data", "men")
-        path = "source_data"
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        for i, item in list_items.iterrows():
-            file_path = f"source_data/{item['sex']}/{item['category']}/{item['color']}"
-            if not os.path.exists(file_path):
-                os.makedirs(file_path)
-            with open(
-                f"{file_path}/page-{p}-item-{i}.html",
-                "w",
-                encoding="utf-8",
-            ) as f:
-                # f.write(item)
-                f.write(item['post'].prettify())
-
-   
     def executeRequest(self, url, retries=5):
     # TODO: if failed , need to retry 
         header = {

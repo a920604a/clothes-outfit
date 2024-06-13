@@ -18,6 +18,7 @@ fastapi = "^0.111.0"
 webdriver-manager = "^4.0.1"
 objprint = "^0.2.3"
 redis = "^5.0.5"
+sqlalchemy = "^2.0.30"
 
 
 [build-system]
