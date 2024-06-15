@@ -1,22 +1,25 @@
 from app.scrapy.LoaderManager import LoaderManager
-from app.models import clothes
+from app.models.clothes import Clothes
 
 
 class BEAMSLoader(LoaderManager):
 
     def __init__(self):
         pass
+
     def load(self, posts):
+
+        print("#" * 30, "load", "#" * 30)
         print(posts)
-        print('#'*30, "load", '#'*30)
-        for post in posts:
-            model = clothes(
-                sex = post.sex,
-                color = post.color,
-                category = post.category,
-                image_url = post.image_url,
-                post_url = post.post_url,
-            )
-
-            model.save()
-
+        for idx, post in posts.iterrows():
+            try:
+                model = Clothes(
+                    sex=post["sex"],
+                    color=post["color"],
+                    category=post["category"],
+                    image_url=post["image_url"],
+                    post_url=post["post_url"],
+                )
+                model.save()
+            except Exception as e:
+                print(f"保存時發生錯誤：{e}")
