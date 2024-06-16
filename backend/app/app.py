@@ -2,7 +2,7 @@ from typing import Union
 from typing import List, Dict
 from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
-from app.notification import logger
+from notification import logger
 import uvicorn
 
 app = FastAPI()
