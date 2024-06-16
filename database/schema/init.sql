@@ -1,9 +1,12 @@
 -- 創建資料庫
 CREATE DATABASE IF NOT EXISTS closet;
+
 -- 授權
 GRANT ALL ON closet.* TO 'ccc'@'%';
+
 -- 使用資料庫
 USE closet;
+
 -- 創建使用者表
 CREATE TABLE IF NOT EXISTS `user` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '使用者ID',
@@ -17,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+
 -- 創建衣服表
 CREATE TABLE IF NOT EXISTS `clothes` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '衣服ID',
@@ -32,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `clothes` (
     INDEX `idx_category` (`category`),
     INDEX `idx_color` (`color`)
 ) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+
 -- 創建收藏表
 CREATE TABLE IF NOT EXISTS `favorites` (
     `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -42,4 +47,15 @@ CREATE TABLE IF NOT EXISTS `favorites` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
     FOREIGN KEY (`clothes_id`) REFERENCES `clothes`(`id`)
+) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+
+-- 創建熱門標籤表
+CREATE TABLE IF NOT EXISTS `popularity` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '衣服ID',
+    `hash_tag` VARCHAR(255) NULL DEFAULT NULL COMMENT '標籤',
+    `image_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '圖片網址',
+    `post_url` VARCHAR(255) NULL DEFAULT NULL COMMENT '發布網址',
+    `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '創建時間',
+    `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新時間',
+    PRIMARY KEY (`id`)
 ) ENGINE = InnoDB ROW_FORMAT = DYNAMIC;

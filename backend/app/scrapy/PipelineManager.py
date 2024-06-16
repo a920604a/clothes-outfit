@@ -1,6 +1,8 @@
 
 from app.models.clothes import Clothes
 from app.scrapy.BEAMSExtract import BEAMSExtract
+from app.scrapy.TransformManager import TransformManager
+from app.scrapy.BEAMSExtractWithHashTag import BEAMSExtractWithHashTag
 from app.scrapy.BEAMSTransform import BEAMSTransform
 from app.scrapy.BEAMSLoader import BEAMSLoader
 from app.notification import logger
@@ -8,10 +10,10 @@ import os
 
 # 定義流水線管理器類
 class PipelineManager:
-    def __init__(self):
-        self.extractor = BEAMSExtract()
-        self.transformer = BEAMSTransform()
-        self.loader = BEAMSLoader()
+    def __init__(self, extractor, transformer, loader):
+        self.extractor = extractor()
+        self.transformer = transformer(self.extractor)
+        self.loader = loader(self.transformer)
         Clothes.truncate_table()
 
 
@@ -20,7 +22,7 @@ class PipelineManager:
         
 
     def run_pipeline(self):
-        for posts  in self.extractor.process_all_urls_generator():
+        for posts  in self.extractor.extract():
             try:
                 logger.info('=' * 50)
                 # logger.info(f"Processing URL: {url}")
@@ -54,7 +56,11 @@ class PipelineManager:
                 # logger.info(f"Successfully processed and loaded data for URL: {url}")
 
             except Exception as e:
-                logger.info(f"Failed to process URL {url} {sex} {category} {color} with error: {e}")
+                # logger.info(f"Failed to process URL {url} {sex} {category} {color} with error: {e}")
                 break
             finally:
                 logger.info('=' * 50)
+    # def run_popularity_pipeline(self):
+    #     for posts in self.extractor.extract():
+    #         continue
+

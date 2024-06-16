@@ -1,8 +1,8 @@
 from app.scrapy.LoaderManager import LoaderManager
-from app.models.clothes import Clothes
+from app.models.popularity import Popularity
 from app.notification import logger
 
-class BEAMSLoader(LoaderManager):
+class BEAMSLoaderWithHashTag(LoaderManager):
 
     def __init__(self, transform):
         self.transform = transform
@@ -10,10 +10,8 @@ class BEAMSLoader(LoaderManager):
     def load(self, posts):
         for idx, post in posts.iterrows():
             try:
-                model = Clothes(
-                    sex=post["sex"],
-                    color=post["color"],
-                    category=post["category"],
+                model = Popularity(
+                    hash_tag = post["hash_tag"],
                     image_url=post["image_url"],
                     post_url=post["post_url"],
                 )

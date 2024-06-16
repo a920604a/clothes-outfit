@@ -1,12 +1,11 @@
 from app.scrapy.TransformManager import TransformManager
-from app.scrapy.BEAMSExtract import BEAMSExtract
 from app.notification import logger
 
 
 class BEAMSTransform(TransformManager):
 
-    def __init__(self):
-        self.extract = BEAMSExtract()
+    def __init__(self, extract):
+        self.extract = extract
 
         self.category_mapping = self.extract.category_mapping_reversed
         # self.sex_mapping = {
