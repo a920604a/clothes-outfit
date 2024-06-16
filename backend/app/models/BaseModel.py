@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy import Column, Integer, String, TIMESTAMP, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import func
+from sqlalchemy.exc import SQLAlchemyError
+
 from contextlib import contextmanager
 from . import Session
 
@@ -75,3 +76,13 @@ class BaseModel(Base):
             for key, value in kwargs.items():
                 query = query.filter(getattr(cls, key) == value)
             return session.query(query.exists()).scalar()
+        
+    @classmethod
+    def truncate_table(cls):
+        """清空 clothes 表中所有數據"""
+        with session_scope() as session:
+            try:
+                session.query(cls).delete()
+            except SQLAlchemyError as e:
+                session.rollback()
+                raise

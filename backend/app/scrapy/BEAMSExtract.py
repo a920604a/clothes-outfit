@@ -2,7 +2,7 @@ from app.scrapy.ExtractManager import ExtractManager
 from enum import Enum
 import pandas as pd
 from itertools import product
-
+from app.notification import logger
 from app.utils.process import replace_spaces, extract_tree_value
 import threading
 import concurrent.futures
@@ -40,7 +40,7 @@ class BEAMSExtract(ExtractManager):
         )
 
         for color_enum in ColorEnum:
-            print(color_enum.name, ":", color_enum.value)
+            logger.info(f"{color_enum.name} : {color_enum.value}")
         return ColorEnum
 
     def generate_sex_enum(self):
@@ -53,7 +53,7 @@ class BEAMSExtract(ExtractManager):
             sex_key = link.split("=")[1]
             sex_value = tag.find("div", class_="option-name").text.strip()
             sex_dict[sex_key] = sex_value
-        print(sex_dict)
+        logger.info(sex_dict)
         return sex_dict
 
     def generate_hash_tag(self):
@@ -90,7 +90,7 @@ class BEAMSExtract(ExtractManager):
                 tag = cat.find("div", class_="option-name")
 
                 categories[tag.text] = tree_value
-        print(categories)
+        logger.info(categories)
         return categories
 
     def get_posts_element(self, soup, sex, category, color):
@@ -118,6 +118,7 @@ class BEAMSExtract(ExtractManager):
             )
             all_posts = pd.concat([all_posts, post], ignore_index=True)
         return all_posts
+    
 
     def get_max_page(self, url, data):
         if data is None:
@@ -135,10 +136,10 @@ class BEAMSExtract(ExtractManager):
                 try:
                     # 將文本內容轉換為整數
                     last_page_number = int(last_page_value)
-                    # print(f"{url} 最後一個頁碼是: {last_page_number}")
+                    # logger.info(f"{url} 最後一個頁碼是: {last_page_number}")
                     return last_page_number
                 except ValueError:
-                    print("最後一個頁碼無法轉換為整數")
+                    logger.info("最後一個頁碼無法轉換為整數")
                     return 1
 
             else:
@@ -152,7 +153,7 @@ class BEAMSExtract(ExtractManager):
     #     page_data = self.executeRequest(
     #         f"https://www.beams.tw/styling/?sex=M&p={page_number}"
     #     )
-    #     print(
+    #     logger.info(
     #         f"現在處理網頁 https://www.beams.tw/styling/?sex={sex.value}&p={page_number} 其頁碼是: {page_number}"
     #     )
     #     posts = self.get_posts_element(page_data)
@@ -177,7 +178,7 @@ class BEAMSExtract(ExtractManager):
         # page_number = min(page_number, 1)  # for testing
         for i in range(1, page_number + 1):
             page_data = self.executeRequest(f"{url}&p={i}")
-            print(f"現在處理網頁 {url} 其頁碼是: {i}/{page_number}")
+            logger.info(f"現在處理網頁 {url} 其頁碼是: {i}/{page_number}")
             if page_data is None:  # 此條件沒有滿足的
                 continue
             else:
@@ -188,7 +189,7 @@ class BEAMSExtract(ExtractManager):
 
     def process_url(self, sex, category, color):
         url = self.generate_url(sex, category, color)
-        print(f"準備爬蟲 {url}")
+        logger.info(f"準備爬蟲 {url}")
         data = self.executeRequest(url)
         page_number = self.get_max_page(url, data)
         return self.process_page(url, page_number, sex, category, color)
@@ -227,48 +228,27 @@ class BEAMSExtract(ExtractManager):
         #     for future in concurrent.futures.as_completed(futures):
         #         all_posts = pd.concat([all_posts, future.result()])
 
-        # print(f"all posts has {len(all_posts)}")
+        # logger.info(f"all posts has {len(all_posts)}")
         # return all_posts
 
     # 使用生成器版本的 process_all_urls
-    # def process_all_urls_generator(self):
-    #     with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
-    #         futures = []
-    #         for sex in self.sex_dict.keys():
-    #             for cat_k, cat_v in self.categories.items():
-    #                 for color in self.ColorEnum:
-    #                     futures.append(
-    #                         executor.submit(self.process_url, sex, cat_v, color)
-    #                     )
-    #         for future in concurrent.futures.as_completed(futures):
-    #             yield future.result()
-
     def process_all_urls_generator(self):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
+            futures = []
+            for sex in self.sex_dict.keys():
+                for cat_k, cat_v in self.categories.items():
+                    for color in self.ColorEnum:
+                        futures.append(
+                            executor.submit(self.process_url, sex, cat_v, color)
+                        )
+            for future in concurrent.futures.as_completed(futures):
+                logger.info("{}{}{}".format('+'*30,'extract' , '+'*30))
+                yield future.result()
 
-        for sex in self.sex_dict.keys():
-            for cat_k, cat_v in self.categories.items():
-                for color in self.ColorEnum:
-                    result = self.process_url(sex, cat_v, color)
-                    # unfolding_result = pd.concat(
-                    #     [
-                    #         pd.DataFrame(
-                    #             {
-                    #                 "post_url": [url],
-                    #                 "image_url": [img],
-                    #                 "sex": [sex],
-                    #                 "category": [category],
-                    #                 "color": [color],
-                    #             }
-                    #         )
-                    #         for url, img, sex, category, color in zip(
-                    #             result["post_url"],
-                    #             result["image_url"],
-                    #             result["sex"],
-                    #             result["category"],
-                    #             result["color"],
-                    #         )
-                    #     ],
-                    #     ignore_index=True,
-                    # )
+    # def process_all_urls_generator(self):
 
-                    yield result
+    #     for sex in self.sex_dict.keys():
+    #         for cat_k, cat_v in self.categories.items():
+    #             for color in self.ColorEnum:
+    #                 result = self.process_url(sex, cat_v, color)
+    #                 yield result

@@ -1,6 +1,6 @@
 from app.scrapy.LoaderManager import LoaderManager
 from app.models.clothes import Clothes
-
+from app.notification import logger
 
 class BEAMSLoader(LoaderManager):
 
@@ -8,9 +8,6 @@ class BEAMSLoader(LoaderManager):
         pass
 
     def load(self, posts):
-
-        print("#" * 30, "load", "#" * 30)
-        print(posts)
         for idx, post in posts.iterrows():
             try:
                 model = Clothes(
@@ -22,4 +19,4 @@ class BEAMSLoader(LoaderManager):
                 )
                 model.save()
             except Exception as e:
-                print(f"保存時發生錯誤：{e}")
+                logger.info(f"保存時發生錯誤：{e}")

@@ -772,7 +772,7 @@ files = [
 [[package]]
 name = "objprint"
 version = "0.2.3"
-description = "A library that can print Python objects in human readable format"
+description = "A library that can logger.info Python objects in human readable format"
 optional = false
 python-versions = ">=3.6"
 files = [

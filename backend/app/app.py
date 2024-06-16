@@ -2,7 +2,7 @@ from typing import Union
 from typing import List, Dict
 from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.notification import logger
 import uvicorn
 
 app = FastAPI()
@@ -38,7 +38,7 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/api/images")
 def get_images(filters: Dict[str, str]):
-    print(f"filters {filters}")
+    logger.info(f"filters {filters}")
     # 根據篩選條件獲取影像URL
     all_images = [
         {
@@ -69,7 +69,7 @@ def get_images(filters: Dict[str, str]):
         and (filters.get("style", "") == "" or image["style"] == filters["style"])
         and (filters.get("gender", "") == "" or image["gender"] == filters["gender"])
     ]
-    print(f"filtered_images = ={filtered_images}")
+    logger.info(f"filtered_images = ={filtered_images}")
 
     return filtered_images
 

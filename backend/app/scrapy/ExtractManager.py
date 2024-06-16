@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import os
 from abc import ABC, abstractmethod
 import pandas as pd
-
+from app.notification import logger
 
 class ExtractManager:
     def __init__(self):
@@ -26,12 +26,12 @@ class ExtractManager:
 
                     return soup
                 else:
-                    print(f"請求失敗。狀態碼：{r.status_code}")
-                    # print("響應內容：", r.text)
+                    logger.info(f"請求失敗。狀態碼：{r.status_code}")
+                    # logger.info("響應內容：", r.text)
             
             except requests.exceptions.RequestException as e:
-                print(f"Request failed: {e}. Retrying...{url}")
-        print(f"Failed to parse {url}")
+                logger.info(f"Request failed: {e}. Retrying...{url}")
+        logger.info(f"Failed to parse {url}")
         return None
 
     @abstractmethod
