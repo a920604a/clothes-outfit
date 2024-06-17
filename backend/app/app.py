@@ -26,52 +26,13 @@ app.add_middleware(
 )
 
 
+from frontend.api import router as api_router
+app.include_router(api_router, prefix="/api")
+
 @app.get("/")
 def root():
     return {"message": "Hello World"}
 
-
-@app.get("/restaurant/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.post("/api/images")
-def get_images(filters: Dict[str, str]):
-    logger.info(f"filters {filters}")
-    # 根據篩選條件獲取影像URL
-    all_images = [
-        {
-            "url": "//cdn.beams.co.jp/taiwan/img/styling/118018/118018_s.jpg",
-            "color": "紅色",
-            "style": "日系",
-            "gender": "男性",
-        },
-        {
-            "url": "//cdn.beams.co.jp/taiwan/img/staff/1/153_s.jpg",
-            "color": "藍色",
-            "style": "工業",
-            "gender": "女性",
-        },
-        {
-            "url": "//cdn.beams.co.jp/taiwan/img/styling/117986/117986_s.jpg",
-            "color": "黑色",
-            "style": "極簡",
-            "gender": "不限性別",
-        },
-        # 添加更多影像...
-    ]
-
-    filtered_images = [
-        image["url"]
-        for image in all_images
-        if (filters.get("color", "") == "" or image["color"] == filters["color"])
-        and (filters.get("style", "") == "" or image["style"] == filters["style"])
-        and (filters.get("gender", "") == "" or image["gender"] == filters["gender"])
-    ]
-    logger.info(f"filtered_images = ={filtered_images}")
-
-    return filtered_images
 
 
 # option 1
