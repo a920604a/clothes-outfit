@@ -4,12 +4,14 @@ from itertools import product
 import concurrent.futures
 from collections import namedtuple
 from objprint import op
-from app.utils.process import replace_spaces, extract_tree_value
-from app.scrapy.BEAMSExtractBase import BEAMSExtractBase
-from app.notification import logger
+
+from utils.process import replace_spaces, extract_tree_value
+from scrapy.BEAMSExtractBase import BEAMSExtractBase
+from notification import logger
 import concurrent.futures
 
 PostData = namedtuple("PostData", ["post", "sex", "color"])
+
 
 class BEAMSExtract(BEAMSExtractBase):
 
@@ -19,14 +21,12 @@ class BEAMSExtract(BEAMSExtractBase):
         self.ColorEnum = self.generate_color_enum()
         self.sex_dict = self.generate_sex_enum()
         self.categories = self.generate_category()
-        
+
         for color_enum in self.ColorEnum:
             logger.info(f"{color_enum.name} : {color_enum.value}")
         logger.info(self.sex_dict)
         logger.info(self.categories)
         self.category_mapping_reversed = {v: k for k, v in self.categories.items()}
-
-
 
     def generate_color_enum(self):
         color_select = self.data.find("div", class_="color-select").find(
@@ -72,7 +72,6 @@ class BEAMSExtract(BEAMSExtractBase):
             url += f"&color_group={color.name}"
         return url
 
-
     # def get_posts_element(self, soup, sex, category, color=None):
     #     main_content = soup.find("body")
     #     list_items = main_content.find("div", class_="listed-items-4columns")
@@ -96,7 +95,6 @@ class BEAMSExtract(BEAMSExtractBase):
     #         all_posts = pd.concat([all_posts, post], ignore_index=True)
     #     return all_posts
 
-
     def process_page(self, url, page_number, sex, category, color=None):
         all_posts = pd.DataFrame()  # 初始化一個空的 DataFrame 來儲存所有的 posts
 
@@ -106,7 +104,9 @@ class BEAMSExtract(BEAMSExtractBase):
             if page_data is None:  # 此條件沒有滿足的
                 continue
             else:
-                posts = self.get_posts_element(page_data, sex=sex, category=category, color=color.name)
+                posts = self.get_posts_element(
+                    page_data, sex=sex, category=category, color=color.name
+                )
                 all_posts = pd.concat([all_posts, posts], ignore_index=True)
         return pd.DataFrame(all_posts)
 
@@ -127,5 +127,5 @@ class BEAMSExtract(BEAMSExtractBase):
                             executor.submit(self.process_url, sex, cat_v, color)
                         )
             for future in concurrent.futures.as_completed(futures):
-                logger.info("{}{}{}".format('+'*30,'extract' , '+'*30))
+                logger.info("{}{}{}".format("+" * 30, "extract", "+" * 30))
                 yield future.result()

@@ -1,7 +1,10 @@
-from models import *
+from models import Session
 from contextlib import contextmanager
+from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, text
+from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy import func
+
 Base = declarative_base()
 
 
@@ -70,7 +73,7 @@ class BaseModel(Base):
             for key, value in kwargs.items():
                 query = query.filter(getattr(cls, key) == value)
             return session.query(query.exists()).scalar()
-        
+
     @classmethod
     def truncate_table(cls):
         """清空 clothes 表中所有數據"""

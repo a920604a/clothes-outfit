@@ -1,6 +1,7 @@
-from app.scrapy.LoaderManager import LoaderManager
-from app.models.popularity import Popularity
-from app.notification import logger
+from scrapy.LoaderManager import LoaderManager
+from models.popularity import Popularity
+from notification import logger
+
 
 class BEAMSLoaderWithHashTag(LoaderManager):
 
@@ -11,7 +12,7 @@ class BEAMSLoaderWithHashTag(LoaderManager):
         for idx, post in posts.iterrows():
             try:
                 model = Popularity(
-                    hash_tag = post["hash_tag"],
+                    hash_tag=post["hash_tag"],
                     image_url=post["image_url"],
                     post_url=post["post_url"],
                 )
