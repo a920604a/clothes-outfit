@@ -1,10 +1,12 @@
 from frontend import *
-
+from fastapi import APIRouter, Query
+from typing import List, Optional
+from typing import Dict
 # from app.notification import logger
 
 router = APIRouter()
 
-@router.post("/images")
+@router.get("/images")
 def get_images(
     color: Optional[str] = Query(None, description="顏色篩選"),
     style: Optional[str] = Query(None, description="風格篩選"),

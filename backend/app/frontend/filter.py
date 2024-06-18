@@ -1,4 +1,7 @@
 from frontend import *
+from typing import List, Optional
+from typing import Dict
+from sqlalchemy.orm import Session
 
 def fetch_filtered_data(color=None, style=None, gender=None, page_number=1, page_size=12):
     offset = (page_number - 1) * page_size

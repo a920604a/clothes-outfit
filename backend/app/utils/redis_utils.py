@@ -8,10 +8,10 @@ class Redis(object):
 
     @staticmethod
     def _get_r():
-        host = config.REDIS['REDIS_HOST']
-        port = config.REDIS['REDIS_PORT']
-        db = config.REDIS['REDIS_DB']
-        passwd = config.REDIS['REDIS_PWD']
+        host = config.REDIS['HOST']
+        port = config.REDIS['PORT']
+        db = config.REDIS['DB']
+        passwd = config.REDIS['PASSWD']
         r = redis.StrictRedis(host=host, port=port, db=db, password=passwd)
         return r
 
