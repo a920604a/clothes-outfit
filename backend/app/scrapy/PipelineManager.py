@@ -14,7 +14,7 @@ class PipelineManager:
         self.extractor = extractor()
         self.transformer = transformer(self.extractor)
         self.loader = loader(self.transformer)
-        Clothes.truncate_table()
+        # Clothes.truncate_table()
 
         # os.makedirs("transform", exist_ok=True)
         # os.makedirs("extract", exist_ok=True)
