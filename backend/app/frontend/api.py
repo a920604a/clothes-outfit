@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Query
-from typing import List, Optional
-from typing import Dict
+from frontend import *
+
 # from app.notification import logger
 
 router = APIRouter()
@@ -9,39 +8,26 @@ router = APIRouter()
 def get_images(
     color: Optional[str] = Query(None, description="顏色篩選"),
     style: Optional[str] = Query(None, description="風格篩選"),
-    gender: Optional[str] = Query(None, description="性別篩選")
+    gender: Optional[str] = Query(None, description="性別篩選"),
+    page: int = Query(1, description="頁碼"),
+    page_size: int = Query(12, description="每頁大小")
 ):
-    # 根據篩選條件獲取影像URL
-    all_images = [
-        {
-            "url": "//cdn.beams.co.jp/taiwan/img/styling/118018/118018_s.jpg",
-            "color": "紅色",
-            "style": "日系",
-            "gender": "男性",
-        },
-        {
-            "url": "//cdn.beams.co.jp/taiwan/img/staff/1/153_s.jpg",
-            "color": "藍色",
-            "style": "工業",
-            "gender": "女性",
-        },
-        {
-            "url": "//cdn.beams.co.jp/taiwan/img/styling/117986/117986_s.jpg",
-            "color": "黑色",
-            "style": "極簡",
-            "gender": "不限性別",
-        },
-        # 添加更多影像...
-    ]
-    print(f"color {color}, style {style}, gender {gender}")
-    filtered_images = [
-        post
-        for post in all_images
-        if (not color or post["color"] == color)
-        and (not style or post["style"] == style)
-        and (not gender or post["gender"] == gender)
-    ]
-    print(filtered_images)
-    # logger.info(filtered_images)
-
-    return filtered_images
+    # 設定快取鍵
+    cache_key = f"clothes:{color}:{style}:{gender}:page{page}"
+    
+    # 檢查是否有快取的資料
+    cached_data = Redis.read_dict(cache_key)
+    if cached_data:
+        return cached_data
+    
+    # 如果沒有快取，從資料庫中查詢
+    data = fetch_filtered_data(color, style, gender, page, page_size)
+    
+    # 存入快取
+    Redis.write_dict(cache_key, data)
+    Redis.expire(cache_key, config.REDIS['REDIS_EXPIRE'])
+    
+    # 緩存未來幾頁的資料
+    cache_filtered_data(color, style, gender, page, page_size, 5)
+    
+    return data

@@ -1,6 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP
-from sqlalchemy.ext.declarative import declarative_base
-from app.models.BaseModel import BaseModel
+from models import *
 
 class Clothes(BaseModel):
     __tablename__ = 'clothes'

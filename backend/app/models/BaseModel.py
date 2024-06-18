@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-from sqlalchemy import Column, Integer, String, TIMESTAMP, text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import func
-from sqlalchemy.exc import SQLAlchemyError
-
+from models import *
 from contextlib import contextmanager
-from . import Session
 
-
+from sqlalchemy import func
 Base = declarative_base()
 
 

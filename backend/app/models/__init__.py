@@ -1,6 +1,14 @@
 from sqlalchemy import create_engine
-from ..conf import config
+from conf import config
 from sqlalchemy.orm import sessionmaker
+
+from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, text
+from sqlalchemy.ext.declarative import declarative_base
+from models.BaseModel import BaseModel
+
+from sqlalchemy.exc import SQLAlchemyError
+
+
 
 # 假設你已經有一個引擎
 db_url = f'mysql+mysqlconnector://{config.MYSQL["USER"]}:{config.MYSQL["PASSWD"]}@{config.MYSQL["HOST"]}:{config.MYSQL["PORT"]}/{config.MYSQL["DB"]}'
