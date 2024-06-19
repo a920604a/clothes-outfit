@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP
-from models.BaseModel import BaseModel
+from app.models.BaseModel import BaseModel
 
 
 class Popularity(BaseModel):

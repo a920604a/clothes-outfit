@@ -1,6 +1,6 @@
-from scrapy.LoaderManager import LoaderManager
-from models.popularity import Popularity
-from notification import logger
+from app.scrapy.LoaderManager import LoaderManager
+from app.models.popularity import Popularity
+from app.notification import logger
 
 
 class BEAMSLoaderWithHashTag(LoaderManager):

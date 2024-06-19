@@ -1,5 +1,5 @@
-from scrapy.TransformManager import TransformManager
-from notification import logger
+from app.scrapy.TransformManager import TransformManager
+from app.notification import logger
 
 
 class BEAMSTransform(TransformManager):

@@ -1,15 +1,15 @@
 version: "3.8"
 
 services:
-  # backend:
-  #   build:
-  #     context: backend/
-  #     dockerfile: Dockerfile
-  #   image: outfit/backend:1.0.0
-  #   container_name: outfit-backend
-  #   restart: unless-stopped
-  #   ports:
-  #     - "5000:5000"
+  backend:
+    build:
+      context: backend/
+      dockerfile: Dockerfile
+    image: outfit/backend:1.0.0
+    container_name: outfit-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
 
   database:
     build:

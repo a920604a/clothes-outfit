@@ -1,10 +1,10 @@
-from models.clothes import Clothes
-from scrapy.BEAMSExtract import BEAMSExtract
-from scrapy.TransformManager import TransformManager
-from scrapy.BEAMSExtractWithHashTag import BEAMSExtractWithHashTag
-from scrapy.BEAMSTransform import BEAMSTransform
-from scrapy.BEAMSLoader import BEAMSLoader
-from notification import logger
+from app.models.clothes import Clothes
+from app.scrapy.BEAMSExtract import BEAMSExtract
+from app.scrapy.TransformManager import TransformManager
+from app.scrapy.BEAMSExtractWithHashTag import BEAMSExtractWithHashTag
+from app.scrapy.BEAMSTransform import BEAMSTransform
+from app.scrapy.BEAMSLoader import BEAMSLoader
+from app.notification import logger
 import os
 
 

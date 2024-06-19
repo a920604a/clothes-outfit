@@ -1,6 +1,6 @@
-from scrapy.ExtractManager import ExtractManager
-from utils.process import replace_spaces, extract_tree_value
-from notification import logger
+from app.scrapy.ExtractManager import ExtractManager
+from app.utils.process import replace_spaces, extract_tree_value
+from app.notification import logger
 import pandas as pd
 
 

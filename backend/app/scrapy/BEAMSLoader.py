@@ -1,6 +1,6 @@
-from scrapy.LoaderManager import LoaderManager
-from models.clothes import Clothes
-from notification import logger
+from app.scrapy.LoaderManager import LoaderManager
+from app.models.clothes import Clothes
+from app.notification import logger
 
 
 class BEAMSLoader(LoaderManager):

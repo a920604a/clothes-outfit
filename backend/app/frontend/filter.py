@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 
-from conf import config  # 使用绝对导入
+from app.conf import config  # 使用绝对导入
 from fastapi import Query
-from models.clothes import Clothes
-from models import engine
-from utils.redis_utils import Redis
+from app.models.clothes import Clothes
+from app.models import engine
+from app.utils.redis_utils import Redis
 
 def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
     offset = (page_number - 1) * page_size

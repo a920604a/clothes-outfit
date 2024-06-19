@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import os
 from abc import ABC, abstractmethod
 import pandas as pd
-from notification import logger
+from app.notification import logger
 
 
 class ExtractManager:

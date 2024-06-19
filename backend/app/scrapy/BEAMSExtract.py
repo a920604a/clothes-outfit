@@ -5,9 +5,9 @@ import concurrent.futures
 from collections import namedtuple
 from objprint import op
 
-from utils.process import replace_spaces, extract_tree_value
-from scrapy.BEAMSExtractBase import BEAMSExtractBase
-from notification import logger
+from app.utils.process import replace_spaces, extract_tree_value
+from app.scrapy.BEAMSExtractBase import BEAMSExtractBase
+from app.notification import logger
 import concurrent.futures
 
 PostData = namedtuple("PostData", ["post", "sex", "color"])

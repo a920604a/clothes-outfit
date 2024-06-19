@@ -1,4 +1,4 @@
-from models import Session
+from app.models import Session
 from contextlib import contextmanager
 from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, text
 from sqlalchemy.ext.declarative import declarative_base

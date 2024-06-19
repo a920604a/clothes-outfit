@@ -1,6 +1,6 @@
 MYSQL = {
-    "HOST": "localhost",
-    "PORT": "3360",
+    "HOST": "database",
+    "PORT": "3306",
     "USER": "ccc",
     "PASSWD": "closet",
     "DB": "closet",
@@ -8,8 +8,8 @@ MYSQL = {
 
 
 REDIS = {
-    'HOST': 'localhost',
-    'PORT': 6380,
+    'HOST': 'cache',
+    'PORT': 6379,
     'PASSWD': '',
     'DB': 0,
     "EXPIRE": 60000

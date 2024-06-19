@@ -1,5 +1,5 @@
 import redis
-from conf import config
+from app.conf import config
 import pickle
 
 

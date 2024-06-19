@@ -1,6 +1,6 @@
-from scrapy.BEAMSExtractBase import BEAMSExtractBase
-from utils.process import replace_spaces
-from notification import logger
+from app.scrapy.BEAMSExtractBase import BEAMSExtractBase
+from app.utils.process import replace_spaces
+from app.notification import logger
 import pandas as pd
 from itertools import product
 import concurrent.futures

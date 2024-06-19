@@ -1,11 +1,11 @@
-from utils.redis_utils import Redis  # 使用绝对导入
-from conf import config  # 使用绝对导入
-from frontend.filter import fetch_filtered_data, cache_filtered_data , fetch_total_items # 使用绝对导入
+from app.utils.redis_utils import Redis  # 使用绝对导入
+from app.conf import config  # 使用绝对导入
+from app.frontend.filter import fetch_filtered_data, cache_filtered_data , fetch_total_items # 使用绝对导入
 from fastapi import APIRouter, Query
 from typing import List, Optional
-from utils.redis_utils import Redis
-from utils.timer import timer
-from utils.clothes import color_dict, sex_dict
+from app.utils.redis_utils import Redis
+from app.utils.timer import timer
+from app.utils.clothes import color_dict, sex_dict
 
 # from app.notification import logger
 

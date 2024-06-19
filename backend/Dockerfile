@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.9-slim-buster
 
 # Set the working directory
 WORKDIR /app
@@ -11,9 +11,9 @@ RUN pip install --no-cache-dir uvicorn
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 80 available to the world outside this container
-EXPOSE 5000
+EXPOSE 8080
 
 # Run Uvicorn
-CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8080"]
 
 
