@@ -14,11 +14,14 @@ def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
         query = session.query(Clothes)
 
         if color:
-            query = query.filter(Clothes.color.in_(color))
-        if gender in ["W", "M"]:
-            query = query.filter(Clothes.sex == gender)
-        elif gender == "":
-            query = query.filter(Clothes.sex.in_(["W", "M"]))
+            if len(color) == 1:
+                query = query.filter(Clothes.color == color[0])
+            else:
+                query = query.filter(Clothes.color.in_(color))
+        if gender == 1:
+            query = query.filter(Clothes.sex == 1)
+        elif gender == 0:
+            query = query.filter(Clothes.sex == 0)
 
         total_items = query.count()
         result = query.offset(offset).limit(page_size).all()

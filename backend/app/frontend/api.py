@@ -20,9 +20,10 @@ def get_images(
     page: int = Query(1, description="頁碼"),
     page_size: int = Query(12, description="每頁大小"),
 ):
+    filtered_color = ""
     # 設定快取鍵
-    filtered_color = [color_dict[c] for c in color if c in color_dict.keys()]
-
+    if color:
+        filtered_color = [color_dict[c] for c in color if c in color_dict.keys()]
     color_key = ",".join(name for name in filtered_color) if filtered_color else "all"
 
     if gender:
@@ -45,7 +46,10 @@ def get_images(
         }
 
     # 如果沒有快取，從資料庫中查詢
-    total_items, data = fetch_filtered_data(filtered_color, gender, page, page_size)
+    if gender:
+        total_items, data = fetch_filtered_data(filtered_color, gender, page, page_size)
+    else:
+        total_items, data = fetch_filtered_data(filtered_color, page, page_size)
 
     # 提取圖片URL和發布URL
     image_urls = [item.image_url for item in data]
@@ -60,3 +64,29 @@ def get_images(
     cache_filtered_data(filtered_color, gender, page, page_size, 5)
 
     return {"all_items": total_items, "image_url": image_urls, "post_url": post_urls}
+
+
+@router.get("/all-items")
+@timer
+def get_all_items(
+    color: Optional[List[str]] = Query(None, description="顏色篩選", alias="color"),
+    gender: Optional[str] = Query(None, description="性別篩選", regex="^(W|M|)$"),
+):
+    print(f" color {color} gender {gender}")
+    # 轉換顏色代碼
+    filtered_color = ""
+    # 設定快取鍵
+    if color:
+        filtered_color = [color_dict[c] for c in color if c in color_dict.keys()]
+    color_key = ",".join(name for name in filtered_color) if filtered_color else "all"
+
+    # 轉換性別代碼
+    if gender:
+        gender = sex_dict.get(gender)
+        total_items, _ = fetch_filtered_data(filtered_color, gender)
+    else:
+        total_items, _ = fetch_filtered_data(filtered_color)
+
+    # 計算符合條件的所有項目數量
+
+    return {"all_items": total_items}
