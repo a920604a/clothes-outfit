@@ -6,27 +6,31 @@ from models.clothes import Clothes
 from models import engine
 from utils.redis_utils import Redis
 
-
 def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
     offset = (page_number - 1) * page_size
-    print(f"fetch_filtered_data {color} and {gender}")
     with Session(engine) as session:
         query = session.query(Clothes)
 
         if color:
-            if len(color) == 1:
-                query = query.filter(Clothes.color == color[0])
-            else:
-                query = query.filter(Clothes.color.in_(color))
-        if gender == 1:
-            query = query.filter(Clothes.sex == 1)
-        elif gender == 0:
-            query = query.filter(Clothes.sex == 0)
+            query = query.filter(Clothes.color.in_(color))
+        if gender in (0, 1):
+            query = query.filter(Clothes.sex == gender)
+
+        result = query.offset(offset).limit(page_size).all()
+    return result
+
+def fetch_total_items(color=None, gender=None):
+    print(f"fetch_total_items {color} and {gender}")
+    with Session(engine) as session:
+        query = session.query(Clothes)
+
+        if color:
+            query = query.filter(Clothes.color.in_(color))
+        if gender in (0, 1):
+            query = query.filter(Clothes.sex == gender)
 
         total_items = query.count()
-        result = query.offset(offset).limit(page_size).all()
-    return total_items, result
-
+    return total_items
 
 def cache_filtered_data(color, gender, current_page, page_size, num_pages):
     for i in range(1, num_pages + 1):
@@ -34,7 +38,6 @@ def cache_filtered_data(color, gender, current_page, page_size, num_pages):
         cache_key = f"clothes:{color}:{gender}:page{next_page}"
         if not Redis.read_dict(cache_key):
             data = fetch_filtered_data(color, gender, next_page, page_size)
-            print(f"set {cache_key} data {data}")
             Redis.write_dict(cache_key, data)
             Redis.expire(cache_key, config.REDIS["EXPIRE"])
             print(f"Cached data for page {next_page}")
