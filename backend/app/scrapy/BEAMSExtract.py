@@ -1,16 +1,11 @@
 import pandas as pd
 from enum import Enum
-from itertools import product
 import concurrent.futures
-from collections import namedtuple
-from objprint import op
 
-from app.utils.process import replace_spaces, extract_tree_value
+from app.utils.process import extract_tree_value
 from app.scrapy.BEAMSExtractBase import BEAMSExtractBase
 from app.notification import logger
-import concurrent.futures
 
-PostData = namedtuple("PostData", ["post", "sex", "color"])
 
 
 class BEAMSExtract(BEAMSExtractBase):

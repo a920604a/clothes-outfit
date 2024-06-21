@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP
+from sqlalchemy import Column, String
 from app.models.BaseModel import BaseModel
 
 

@@ -1,6 +1,5 @@
+from sqlalchemy import Column, Integer, String
 from app.models.BaseModel import BaseModel
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP
-
 
 class Clothes(BaseModel):
     __tablename__ = "clothes"

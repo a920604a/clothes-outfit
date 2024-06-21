@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
-from app.conf import config
 from sqlalchemy.orm import sessionmaker
-
+from app.conf import config
 
 # 假設你已經有一個引擎
 db_url = f'mysql+mysqlconnector://{config.MYSQL["USER"]}:{config.MYSQL["PASSWD"]}@{config.MYSQL["HOST"]}:{config.MYSQL["PORT"]}/{config.MYSQL["DB"]}'

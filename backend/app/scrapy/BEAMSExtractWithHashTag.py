@@ -1,9 +1,9 @@
+import pandas as pd
+import concurrent.futures
+
 from app.scrapy.BEAMSExtractBase import BEAMSExtractBase
 from app.utils.process import replace_spaces
 from app.notification import logger
-import pandas as pd
-from itertools import product
-import concurrent.futures
 
 
 class BEAMSExtractWithHashTag(BEAMSExtractBase):
