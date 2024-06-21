@@ -10,5 +10,5 @@
    4. `python3 scrapy.py` , maybe wait for 20 minutes
 3. docker compose up -d 
 
-## lookup api `http://localhost:8080/api/images`
+## look api `http://localhost:8080/api/images`
 after launching `docker comppose`, you could open browser, enter `http://localhost:8080/docs` more detail. 
