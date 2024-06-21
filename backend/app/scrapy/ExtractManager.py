@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import os
-from abc import ABC, abstractmethod
-import pandas as pd
+from abc import abstractmethod
 from app.notification import logger
 
 

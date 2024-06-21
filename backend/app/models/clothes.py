@@ -1,5 +1,5 @@
 from app.models.BaseModel import BaseModel
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP
+from sqlalchemy import Column, Integer, String
 
 
 class Clothes(BaseModel):

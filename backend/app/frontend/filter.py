@@ -1,7 +1,5 @@
 from sqlalchemy.orm import Session
-
-from app.conf import config  # 使用绝对导入
-from fastapi import Query
+from app.conf import config 
 from app.models.clothes import Clothes
 from app.models import engine
 from app.utils.redis_utils import Redis

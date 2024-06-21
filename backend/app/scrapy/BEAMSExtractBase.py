@@ -1,7 +1,7 @@
-from app.scrapy.ExtractManager import ExtractManager
-from app.utils.process import replace_spaces, extract_tree_value
-from app.notification import logger
 import pandas as pd
+from app.scrapy.ExtractManager import ExtractManager
+from app.notification import logger
+
 
 
 class BEAMSExtractBase(ExtractManager):

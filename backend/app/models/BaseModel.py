@@ -1,9 +1,9 @@
-from app.models import Session
 from contextlib import contextmanager
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, text
+from sqlalchemy import Column, Integer, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
-
 from sqlalchemy import func
+from app.models import Session
+
 
 Base = declarative_base()
 
