@@ -65,29 +65,6 @@ class BEAMSExtract(BEAMSExtractBase):
             url += f"&color_group={color.name}"
         return url
 
-    # def get_posts_element(self, soup, sex, category, color=None):
-    #     main_content = soup.find("body")
-    #     list_items = main_content.find("div", class_="listed-items-4columns")
-    #     list_posts = list_items.find_all(
-    #         "li", class_="beams-list-image-item has-author"
-    #     )
-    #     all_posts = pd.DataFrame()
-    #     for post in list_posts:
-    #         element = post.find("div", class_="beams-list-image-item-img")
-    #         post_url = element.find("a")["href"]
-    #         image_url = element.find("img")["src"]
-    #         post = pd.DataFrame(
-    #             {
-    #                 "post_url": [post_url],
-    #                 "image_url": [image_url],
-    #                 "sex": [sex],
-    #                 "category": [category],
-    #                 "color": [color],
-    #             }
-    #         )
-    #         all_posts = pd.concat([all_posts, post], ignore_index=True)
-    #     return all_posts
-
     def process_page(self, url, page_number, sex, category, color=None):
         all_posts = pd.DataFrame()  # 初始化一個空的 DataFrame 來儲存所有的 posts
 
