@@ -18,15 +18,6 @@ class Redis(object):
         return r
 
     @classmethod
-    def write(self, key, value, expire=None):
-        if expire:
-            expire_in_seconds = expire
-        else:
-            expire_in_seconds = config.REDIS["EXPIRE"]
-        r = self._get_r()
-        r.set(key, value, ex=expire_in_seconds)
-
-    @classmethod
     def write_dict(self, key, value, expire=None):
         if expire:
             expire_in_seconds = expire
@@ -44,47 +35,10 @@ class Redis(object):
         return pickle.loads(data)
 
     @classmethod
-    def read(self, key):
-        r = self._get_r()
-        value = r.get(key)
-        return value.decode("utf-8") if value else value
-
-    @classmethod
-    def hset(self, name, key, value):
-        r = self._get_r()
-        r.hset(name, key, value)
-
-    @classmethod
-    def hmset(self, key, *value):
-        r = self._get_r()
-        value = r.hmset(key, *value)
-        return value
-
-    @classmethod
-    def hget(self, name, key):
-        """
-        读取指定hash表的键值
-        """
-        r = self._get_r()
-        value = r.hget(name, key)
-        return value.decode("utf-8") if value else value
-
-    @classmethod
-    def hgetall(self, name):
-        r = self._get_r()
-        return r.hgetall(name)
-
-    @classmethod
     def delete(self, *names):
 
         r = self._get_r()
         r.delete(*names)
-
-    @classmethod
-    def hdel(self, name, key):
-
-        r = self._get_r()
-        r.hdel(name, key)
 
     @classmethod
     def expire(self, name, expire=None):
