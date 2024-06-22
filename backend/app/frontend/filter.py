@@ -1,8 +1,39 @@
 from sqlalchemy.orm import Session
 from app.conf import config
 from app.models.clothes import Clothes
+from app.models.popularity import Popularity
 from app.models import engine
 from app.utils.redis_utils import Redis
+
+
+def fetch_popularity_data(page_number=1, page_size=12):
+    offset = (page_number - 1) * page_size
+    with Session(engine) as session:
+
+        query = session.query(Popularity)
+        result = query.offset(offset).limit(page_size).all()
+        return result
+
+
+def cache_popularity_data(current_page, page_size, num_pages):
+    for i in range(1, num_pages + 1):
+        next_page = current_page + i
+        cache_key = f"popularity:page{next_page}"
+        if not Redis.read_dict(cache_key):
+            data = fetch_popularity_data(next_page, page_size)
+            Redis.write_dict(cache_key, data)
+            Redis.expire(cache_key, config.REDIS["EXPIRE"])
+            print(f"Cached data for page {next_page}")
+        else:
+            print(f"Page {next_page} data already cached")
+
+
+def fetch_total_popularity_items():
+    print("fetch_total_popularity_items")
+    with Session(engine) as session:
+        query = session.query(Popularity)
+        total_items = query.count()
+    return total_items
 
 
 def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
@@ -19,7 +50,7 @@ def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
     return result
 
 
-def fetch_total_items(color=None, gender=None):
+def fetch_total_clothes_items(color=None, gender=None):
     print(f"fetch_total_items {color} and {gender}")
     with Session(engine) as session:
         query = session.query(Clothes)
