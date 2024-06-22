@@ -1,15 +1,17 @@
-from app.utils.redis_utils import Redis  # 使用绝对导入
-from app.conf import config  # 使用绝对导入
-from app.frontend.filter import fetch_filtered_data, cache_filtered_data , fetch_total_items # 使用绝对导入
 from fastapi import APIRouter, Query
 from typing import List, Optional
 from app.utils.redis_utils import Redis
+from app.conf import config
+from app.frontend.filter import (
+    fetch_filtered_data,
+    cache_filtered_data,
+    fetch_total_items,
+)
 from app.utils.timer import timer
 from app.utils.clothes import color_dict, sex_dict
 
-# from app.notification import logger
-
 router = APIRouter()
+
 
 @router.get("/images")
 @timer
@@ -33,7 +35,7 @@ def get_images(
     cached_data = Redis.read_dict(cache_key)
     total_items_key = f"clothes:{color_key}:{gender_key}:total_items"
     total_items = Redis.read_dict(total_items_key)
-    
+
     if cached_data:
         print(f"{cache_key} is already in cache")
         image_urls = [item.image_url for item in cached_data]

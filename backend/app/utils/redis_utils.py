@@ -5,7 +5,7 @@ import pickle
 
 class Redis(object):
     """
-    redis数据库操作
+    redis資料庫操作
     """
 
     @staticmethod
@@ -19,10 +19,6 @@ class Redis(object):
 
     @classmethod
     def write(self, key, value, expire=None):
-        """
-        写入键值对
-        """
-        # 判断是否有过期时间，没有就设置默认值
         if expire:
             expire_in_seconds = expire
         else:
@@ -32,9 +28,6 @@ class Redis(object):
 
     @classmethod
     def write_dict(self, key, value, expire=None):
-        """
-        将内存数据二进制通过序列号转为文本流，再存入redis
-        """
         if expire:
             expire_in_seconds = expire
         else:
@@ -44,9 +37,6 @@ class Redis(object):
 
     @classmethod
     def read_dict(self, key):
-        """
-        将文本流从redis中读取并反序列化，返回
-        """
         r = self._get_r()
         data = r.get(key)
         if data is None:
@@ -55,26 +45,17 @@ class Redis(object):
 
     @classmethod
     def read(self, key):
-        """
-        读取键值对内容
-        """
         r = self._get_r()
         value = r.get(key)
         return value.decode("utf-8") if value else value
 
     @classmethod
     def hset(self, name, key, value):
-        """
-        写入hash表
-        """
         r = self._get_r()
         r.hset(name, key, value)
 
     @classmethod
     def hmset(self, key, *value):
-        """
-        读取指定hash表的所有给定字段的值
-        """
         r = self._get_r()
         value = r.hmset(key, *value)
         return value
@@ -90,36 +71,27 @@ class Redis(object):
 
     @classmethod
     def hgetall(self, name):
-        """
-        获取指定hash表所有的值
-        """
         r = self._get_r()
         return r.hgetall(name)
 
     @classmethod
     def delete(self, *names):
-        """
-        删除一个或者多个
-        """
+
         r = self._get_r()
         r.delete(*names)
 
     @classmethod
     def hdel(self, name, key):
-        """
-        删除指定hash表的键值
-        """
+
         r = self._get_r()
         r.hdel(name, key)
 
     @classmethod
     def expire(self, name, expire=None):
-        """
-        设置过期时间
-        """
+
         if expire:
             expire_in_seconds = expire
         else:
-            expire_in_seconds = app.config["EXPIRE"]
+            expire_in_seconds = config.REDIS["EXPIRE"]
         r = self._get_r()
         r.expire(name, expire_in_seconds)

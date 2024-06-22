@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
-
-from app.conf import config  # 使用绝对导入
+from app.conf import config
 from app.models.clothes import Clothes
 from app.models import engine
 from app.utils.redis_utils import Redis
+
 
 def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
     offset = (page_number - 1) * page_size
@@ -18,6 +18,7 @@ def fetch_filtered_data(color=None, gender=None, page_number=1, page_size=12):
         result = query.offset(offset).limit(page_size).all()
     return result
 
+
 def fetch_total_items(color=None, gender=None):
     print(f"fetch_total_items {color} and {gender}")
     with Session(engine) as session:
@@ -30,6 +31,7 @@ def fetch_total_items(color=None, gender=None):
 
         total_items = query.count()
     return total_items
+
 
 def cache_filtered_data(color, gender, current_page, page_size, num_pages):
     for i in range(1, num_pages + 1):

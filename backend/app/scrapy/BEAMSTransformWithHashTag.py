@@ -1,5 +1,4 @@
 from app.scrapy.TransformManager import TransformManager
-from app.notification import logger
 
 
 class BEAMSTransformWithHashTag(TransformManager):

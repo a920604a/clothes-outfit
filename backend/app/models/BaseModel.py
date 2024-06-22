@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from sqlalchemy import Column, Integer, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import func
+from sqlalchemy.exc import SQLAlchemyError
 from app.models import Session
 
 Base = declarative_base()
@@ -24,11 +25,9 @@ def session_scope():
 class BaseModel(Base):
     __abstract__ = True  # abstract class
     id = Column(Integer, primary_key=True, autoincrement=True, comment="pk")
-    # created_by = Column(String(64))
     created_at = Column(
         TIMESTAMP(True), comment="創立時間", nullable=False, server_default=func.now()
     )
-    # updated_by = Column(String(64))
     updated_at = Column(
         TIMESTAMP(True),
         comment="更新時間",
@@ -36,7 +35,6 @@ class BaseModel(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
-    # remark = Column(String(200), comment="comment")
 
     def save(self):
         with session_scope() as session:
@@ -57,16 +55,6 @@ class BaseModel(Base):
 
     @classmethod
     def exists(cls, **kwargs):
-        """
-        检查是否存在符合条件的实例
-
-        Args:
-            model_class: 要检查的模型类
-            **kwargs: 检查条件，例如 {'id': 1, 'name': 'John'}
-
-        Returns:
-            bool: 是否存在符合条件的实例
-        """
         with session_scope() as session:
             query = session.query(cls)
             for key, value in kwargs.items():

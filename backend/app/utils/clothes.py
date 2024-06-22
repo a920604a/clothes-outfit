@@ -1,5 +1,3 @@
-
-
 colors_list = [
     {"code": "brown", "name": "棕色系"},
     {"code": "orange", "name": "橘色系"},

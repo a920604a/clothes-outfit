@@ -1,6 +1,6 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 from app.frontend.api import router as api_router
 
 app = FastAPI()
@@ -11,7 +11,6 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "http://frontend",  # 使用服務名稱作為來源
-
     # "http://localhost:8080",
 ]
 

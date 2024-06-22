@@ -1,11 +1,9 @@
 import pandas as pd
 from enum import Enum
 import concurrent.futures
-
 from app.utils.process import extract_tree_value
 from app.scrapy.BEAMSExtractBase import BEAMSExtractBase
 from app.notification import logger
-
 
 
 class BEAMSExtract(BEAMSExtractBase):
