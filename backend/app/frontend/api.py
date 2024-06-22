@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 from typing import List, Optional
-from app.frontend.api import get_popularity_data, get_filtered_data
+from app.frontend.fetch import get_popularity_data, get_filtered_data
 
 from app.utils.timer import timer
 
