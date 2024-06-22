@@ -36,3 +36,16 @@ services:
       - "6380:6379"
     volumes:
       - ./cache/data:/data
+  data_analysis:
+    build:
+      context: data_analysis/
+      dockerfile: Dockerfile
+    image: outfit/data_analysis:1.0.0
+    container_name: outfit-data_analysis
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data_analysis:/app
+    depends_on:
+      - database
