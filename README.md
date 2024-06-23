@@ -12,3 +12,9 @@
 
 ## look api `http://localhost:8080/api/images`
 after launching `docker comppose`, you could open browser, enter `http://localhost:8080/docs` more detail. 
+
+
+## How to launch app
+1. cd `frontend/app` and npm i
+2. `npm run build` to generate `dist/`
+3. docker compose up -d 
