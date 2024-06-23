@@ -16,7 +16,11 @@ def get_images(
     page: int = Query(1, description="頁碼"),
     page_size: int = Query(12, description="每頁大小"),
 ):
-    print(color, gender)
+    # 如果 color 是單一字符串並包含逗號，則手動分割它
+    if color and len(color) == 1 and ',' in color[0]:
+        color = color[0].split(',')
+
+    print(color, gender)  # 用於調試
     if color is None and gender is None:
         return get_popularity_data(page, page_size)
     else:
