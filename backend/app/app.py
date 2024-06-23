@@ -9,7 +9,7 @@ origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
     "http://localhost",
-    "http://localhost:3000",
+    "http://localhost:5173",
     "http://frontend",  # 使用服務名稱作為來源
     # "http://localhost:8080",
 ]

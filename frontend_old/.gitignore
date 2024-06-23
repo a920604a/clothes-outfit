@@ -8,9 +8,8 @@ logs
 **/*.backup.*
 **/*.back.*
 
-app/node_modules
-app/bower_components
-app/dist
+node_modules
+bower_components
 
 *.sublime*
 
