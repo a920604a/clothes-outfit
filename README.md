@@ -1,7 +1,7 @@
 # clothes-outfit
 
 
-## How to launch
+## How to launch Backend
 1. git clone this repo.
 2. docker compose up -d
 3. need to extract from other data source , before invoking api
@@ -14,7 +14,7 @@
 after launching `docker comppose`, you could open browser, enter `http://localhost:8080/docs` more detail. 
 
 
-## How to launch app
+## How to launch App
 1. cd `frontend/app` and npm i
 2. `npm run build` to generate `dist/`
 3. docker compose up -d 
