@@ -1,5 +1,6 @@
 from typing import List, Optional
 from app.utils.redis_utils import Redis
+from app.utils.timer import timer
 from app.conf import config
 from app.frontend.filter import (
     fetch_filtered_data,
@@ -12,6 +13,7 @@ from app.frontend.filter import (
 from app.utils.clothes import color_dict, sex_dict
 
 
+@timer
 def get_popularity_data(page: int, page_size: int):
     popularity_cache_key = f"popularity:page{page}"
     popularity_cached_data = Redis.read_dict(popularity_cache_key)
@@ -49,6 +51,7 @@ def get_popularity_data(page: int, page_size: int):
     }
 
 
+@timer
 def get_filtered_data(
     color: Optional[List[str]], gender: Optional[str], page: int, page_size: int
 ):
