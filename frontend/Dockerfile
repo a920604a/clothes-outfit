@@ -1,15 +1,33 @@
-# 使用官方的 Nginx 作為基底映像
-FROM nginx:stable
+# 使用 node 來建置前端應用
+FROM node:18 AS build
 
-# 設置作者信息
-LABEL maintainer="a920604a@gmail.com"
+# 設定工作目錄
+WORKDIR /app
 
-# 將本地的 nginx.conf 配置文件複製到 Nginx 預設配置目錄中
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+# 複製 package.json 和 package-lock.json
+COPY app/package*.json ./
 
-# 將 dist 資料夾中的內容複製到 Nginx 的靜態文件目錄中
-COPY app/dist/ /usr/share/nginx/html/
 
-# 預設情況下，nginx:stable 映像已經設置了 EXPOSE 80
+# 安裝相依套件
+RUN npm install
 
-# CMD 指令不需要特別定義，因為父映像 nginx:stable 已經包含了啟動 Nginx 的配置
+# 複製專案檔案
+COPY app/. . 
+
+# 編譯專案
+RUN npm run build
+
+# 用 nginx 提供服務
+FROM nginx:alpine
+# 複製建置後的檔案到 nginx html 資料夾
+COPY --from=build /app/dist  /usr/share/nginx/html
+
+
+# 替代 nginx 預設設定
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# 開放端口
+EXPOSE 80
+
+# 啟動 nginx
+CMD ["nginx", "-g", "daemon off;"]

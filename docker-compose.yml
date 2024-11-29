@@ -10,9 +10,9 @@ services:
     restart: unless-stopped
     ports:
       - "5173:80"
-    volumes:
+      # volumes:
       # - ./frontend/app:/app
-      - ./frontend/app/dist:/usr/share/nginx/html
+      # - ./frontend/app/dist:/usr/share/nginx/html
   backend:
     build:
       context: backend/
